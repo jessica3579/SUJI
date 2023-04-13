@@ -1,0 +1,130 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define STACK_SIZE 10
+int* stack;
+int top = -1;               // top 초기화
+int size = 1;
+
+int isEmpty() {
+	if (top == -1) return 1;
+	else return 0;
+}
+int isFull() {
+	if (top % STACK_SIZE == 9) return 1;
+	else return 0;
+}
+
+void append(int item) { // 스택의 top에 원소를 삽입하는 연산
+	int* temp;
+	if (isFull()) {
+		printf(" Full STACK\n");
+		temp = (int*)malloc((STACK_SIZE * size) * sizeof(int)); //temp :임시 저장공간
+
+		for (int i = 0; i < (top + 1); i++) temp[i] = stack[i]; //temp에 stack의 값을 옮겨둚
+		free(stack);
+		stack = (int*)malloc((STACK_SIZE * (size + 1)) * sizeof(int)); //stack을 다시 동적할당
+
+		for (int i = 0; i < (top + 1); i++) stack[i] = temp[i]; //stack에 temp값을 다시 넣어둠
+		stack[++top] = item;  // top을 증가시킨 후 현재 top에 원소 삽입
+		size++;
+		free(temp);
+	}
+	else stack[++top] = item;  // top을 증가시킨 후 현재 top에 원소 삽입
+}
+void insert(int pos1) { // pos 위치에 데이터를 추가  , 위치에 -1해줘야함 , 뒤로 데이터를 밀어주고 값을 넣으면 됨
+	int i, re, * temp;
+	int* stack1;
+	if (top % 10 == 9) { //스택 메모리 늘려야함
+		printf("\n INSERT CHANGE STACK");
+		re = stack[top];
+		temp = (int*)malloc(STACK_SIZE * (size + 1) * sizeof(int));
+		for (i = 0; i < (top + 1); i++) temp[i] = stack[i];
+		free(stack);
+		stack = (int*)malloc(STACK_SIZE * (size + 1) * sizeof(int));
+		for (i = 0; i < (top + 1); i++) stack[i] = temp[i];
+		free(temp);
+		size++;
+
+		stack1 = (int*)malloc((STACK_SIZE * (size)) * sizeof(int));
+		for (int i = (pos1); i < top + 1; i++) stack1[i - pos1] = stack[i];
+		for (int i = (pos1 + 1); i < (top + 2); i++) stack[i] = stack1[i - pos1 - 1];
+		stack[pos1] = 777;
+		++top;
+
+		return re;
+	}
+	else {
+		stack1 = (int*)malloc((STACK_SIZE * (size)) * sizeof(int));
+		for (int i = (pos1); i < top + 1; i++) stack1[i - pos1] = stack[i];
+		for (int i = (pos1 + 1); i < (top + 2); i++) stack[i] = stack1[i - pos1 - 1];
+		stack[pos1] = 777;
+		++top;
+
+		return stack[top++];
+	}
+
+}
+
+void pop(int pos2) { // pos 위치의 데이터를 꺼내고 삭제, empty상태가 아닌지 확인해줘야함
+	//top % 10==0이면 메모리 줄여줘야함  // 아래의 코드는 맨 끝의 값을 pop시키는 코드
+
+	if (isEmpty()) {
+		printf("\n\n Stack is Empty!!\n");
+		return 0;
+	}
+	else {
+		int i, re, * temp;
+		int* stack1;
+		stack1 = (int*)malloc((STACK_SIZE * (size)) * sizeof(int));
+		for (int i = (pos2 + 1); i < top + 1; i++) stack1[i - pos2 - 1] = stack[i];
+		for (int i = (pos2); i < (top); i++) stack[i] = stack1[i - pos2];
+
+		if (top % 10 == 0) {
+			printf("\n POP CHANGE STACK");
+			re = stack[top];   
+			temp = (int*)malloc(STACK_SIZE * (size - 1) * sizeof(int));
+			for (i = 0; i < (top); i++) temp[i] = stack[i];
+			free(stack);
+			stack = (int*)malloc(STACK_SIZE * (size - 1) * sizeof(int));
+			for (i = 0; i < (top + 1); i++) stack[i] = temp[i];
+			free(temp);
+			top--;
+			size--;
+			return re;
+		}
+		else {
+			return stack[top--];
+		}
+
+	}
+}
+
+void printStack() { 
+	int i;
+	printf("\n STACK SIZE [%d]", (STACK_SIZE * size));  
+	printf("\n STACK [ ");
+	for (i = 0; i <= top; i++) printf("%d ", stack[i]);
+	printf("]\n\n");
+}
+
+void main(void) {  //메인
+	int i, pos1, pos2;
+	stack = (int*)malloc(STACK_SIZE * sizeof(int));  // stack 동적할당
+	for (i = 0; i < 40; i++) append(i);
+	printStack();
+
+	printf(" 777을 insert할 index를 입력하세요: ");
+	scanf_s("%d", &pos1);
+	printf(" Insert Data index %d, Insert Data 777\n", pos1);
+	insert(pos1);
+	printStack();
+
+	printf(" pop할 값의 index를 입력하세요: ");
+	scanf_s("%d", &pos2);
+	printf(" POP Data [%d]\n", stack[pos2]);
+	pop(pos2);
+	printStack();
+
+	free(stack);
+	getchar();    
+}
