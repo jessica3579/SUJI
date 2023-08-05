@@ -22,7 +22,7 @@
 
  <p>첫째 줄에 A+B를 출력한다.</p>
 
-#<방법 1>
+# <방법 1>
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -36,7 +36,7 @@ public class Main {
 }
 
 
-#<방법 2>
+# <방법 2>
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
