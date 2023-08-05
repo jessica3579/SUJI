@@ -8,7 +8,7 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int a = Integer.parseInt(st.nextToken());
         int b = Integer.parseInt(st.nextToken());
-        bw.write(String.valueOf(a+b));
-        bw.close();
+        bw.append(String.valueOf(a+b));
+        bw.flush();
     }
 }
