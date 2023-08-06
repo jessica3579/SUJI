@@ -1,28 +1,29 @@
+import java.io.*;
 import java.util.*;
+
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int a = sc.nextInt();
-        int b= sc.nextInt();
-        int c = sc.nextInt();
-
-        int h, m, h_r, m_r, i=0, j=0;
-        h = c / 60;
-        m = c % 60;
-
-        h_r = a + h;
-        m_r = b + m;
-
-        if(m_r >= 60){
-            i = m_r / 60;
-            j = m_r % 60;
-            m_r = j;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int h = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        int need = Integer.parseInt(br.readLine());
+        
+        if(m+need<60){
+            m = m+need;
+            bw.write(h+" "+m);
+        }else{
+            if(h+(m+need)/60<24) {
+                h = h + (m + need) / 60;
+                m = (m + need) % 60;
+                bw.write(h + " " + m);
+            }else {
+                h = (h+(m+need)/60)%24;
+                m = (m + need) % 60;
+                bw.write(h + " " + m);
+            }
         }
-        h_r += i;
-
-        if(h_r >= 24){
-            h_r %= 24;
-        }
-        System.out.println(h_r + " " + m_r);
+        bw.close();
     }
 }
